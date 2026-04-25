@@ -247,20 +247,15 @@ vim.keymap.set("n", "<leader>e", function()
 	})
 end, { desc = "Toggle snacks explorer floating" })
 
--- ===================== telescope =====================
-vim.pack.add({
-	{ src = "https://github.com/nvim-telescope/telescope.nvim" },
-}, {
-	load = function()
-		vim.cmd.packadd("telescope.nvim")
-		local builtin = require("telescope.builtin")
-		vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
-		vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
-		vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope help tags" })
-		vim.keymap.set("n", "<leader>f/", builtin.current_buffer_fuzzy_find, { desc = "Telescope current buffer fuzzy find" })
-		vim.keymap.set("n", "<leader>/", builtin.current_buffer_fuzzy_find, { desc = "Telescope current buffer fuzzy find" })
-	end,
-})
+-- ===================== Snacks Picker 快捷键 =====================
+vim.keymap.set("n", "<leader>ff", function() Snacks.picker.files() end, { desc = "Find files" })
+vim.keymap.set("n", "<leader>fb", function() Snacks.picker.buffers() end, { desc = "Buffers" })
+vim.keymap.set("n", "<leader>fg", function() Snacks.picker.grep() end, { desc = "Live grep" })
+vim.keymap.set("n", "<leader>fh", function() Snacks.picker.help() end, { desc = "Help tags" })
+vim.keymap.set("n", "<leader>fr", function() Snacks.picker.recent() end, { desc = "Recent files" })
+vim.keymap.set("n", "<leader>fn", function() Snacks.picker.notifications() end, { desc = "Notifications" })
+vim.keymap.set("n", "<leader>f/", function() Snacks.picker.lines() end, { desc = "Current buffer fuzzy find" })
+vim.keymap.set("n", "<leader>/", function() Snacks.picker.lines() end, { desc = "Current buffer fuzzy find" })
 
 -- ===================== nvim-treesitter =====================
 vim.pack.add({
