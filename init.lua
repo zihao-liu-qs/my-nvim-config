@@ -189,6 +189,12 @@ vim.pack.add({
 				width = 30,
 			},
 			close_if_last_window = true,
+			filesystem = {
+				follow_current_file = {
+					enabled = true,
+					leave_dirs_open = false,
+				},
+			},
 		})
 	end,
 })
@@ -198,6 +204,8 @@ vim.keymap.set("n", "<leader>E", function()
 		source = "filesystem",
 		position = "left",
 		toggle = true,
+		reveal = true,
+		reveal_force_cwd = true,
 	})
 end, { desc = "Toggle neo-tree sidebar" })
 vim.keymap.set("n", "<leader>e", function()
@@ -206,6 +214,8 @@ vim.keymap.set("n", "<leader>e", function()
 		source = "filesystem",
 		position = "float",
 		toggle = true,
+		reveal = true,
+		reveal_force_cwd = true,
 	})
 end, { desc = "Toggle neo-tree floating" })
 
