@@ -2,6 +2,46 @@
 
 vim.g.mapleader = " "
 
+-- 抑制所有早期消息，防止启动时 "Press ENTER"
+vim.notify = function() end
+
+-- noice（浮动命令行 + 消息管理）
+vim.pack.add({
+	{ src = "https://github.com/MunifTanjim/nui.nvim" },
+	{ src = "https://github.com/folke/noice.nvim" },
+}, {
+	load = function()
+		vim.cmd.packadd("nui.nvim")
+		vim.cmd.packadd("noice.nvim")
+	end,
+})
+
+vim.cmd.packadd("nui.nvim")
+vim.cmd.packadd("noice.nvim")
+require("noice").setup({
+	cmdline = {
+		enabled = true,
+		view = "cmdline_popup",
+		format = {
+			cmdline = { pattern = "^:", icon = "", lang = "vim", view = "cmdline_popup" },
+			search_down = { kind = "search", pattern = "^/", icon = " ", lang = "regex", view = "cmdline_popup" },
+			search_up = { kind = "search", pattern = "^%?", icon = " ", lang = "regex", view = "cmdline_popup" },
+			filter = { pattern = "^:%s*!", icon = "$", lang = "bash", view = "cmdline_popup" },
+			lua = { pattern = { "^:%s*lua%s+", "^:%s*lua%s*=%s*", "^:%s*=%s*" }, icon = "", lang = "lua", view = "cmdline_popup" },
+		},
+	},
+	messages = {
+		enabled = true,
+		view = "notify",
+		view_error = "notify",
+		view_warn = "notify",
+		view_history = "messages",
+		view_search = false,
+	},
+	popupmenu = { enabled = false },
+	notify = { enabled = false },
+})
+
 -- ===================== 基础选项 =====================
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -16,7 +56,8 @@ vim.opt.incsearch = true
 vim.opt.laststatus = 0
 vim.opt.showtabline = 0
 vim.opt.ruler = false
-vim.opt.cmdheight = 1
+vim.opt.cmdheight = 0
+vim.opt.shortmess:append("AWI")  -- 抑制启动消息和 "Press ENTER" 提示
 vim.opt.autoread = true
 vim.opt.conceallevel = 2
 vim.opt.backup = true
@@ -80,21 +121,19 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 	end,
 })
 
--- 启动时无文件则自动打开 neo-tree 文件树
+-- 启动时无文件则自动打开 snacks explorer
 vim.api.nvim_create_autocmd("VimEnter", {
 	callback = function()
-		-- 如果当前 buffer 没有实际文件（空启动 / 无参数）
 		local buf = vim.api.nvim_get_current_buf()
 		local name = vim.api.nvim_buf_get_name(buf)
 		local has_file = name ~= "" and vim.fn.filereadable(name) == 1
 		local has_buffers = #vim.api.nvim_list_bufs() > 1
 
 		if not has_file and not has_buffers then
-			require("neo-tree.command").execute({
-				action = "focus",
-				source = "filesystem",
-				position = "float",
-			})
+	Snacks.explorer({
+		layout = { preset = "dropdown", preview = false },
+		jump = { close = true },
+	})
 		end
 	end,
 })
@@ -175,49 +214,38 @@ vim.pack.add({
 	end,
 })
 
--- ===================== neo-tree =====================
+-- ===================== snacks =====================
 vim.pack.add({
-	{ src = "https://github.com/nvim-neo-tree/neo-tree.nvim" },
-	{ src = "https://github.com/MunifTanjim/nui.nvim" },
-	{ src = "https://github.com/nvim-tree/nvim-web-devicons" },
+	{ src = "https://github.com/folke/snacks.nvim" },
 }, {
 	load = function(plug_data)
-		vim.cmd.packadd(plug_data.spec.name)
-		require("neo-tree").setup({
-			window = {
-				position = "left",
-				width = 30,
-			},
-			close_if_last_window = true,
-			filesystem = {
-				follow_current_file = {
-					enabled = true,
-					leave_dirs_open = false,
-				},
-			},
-		})
+		vim.cmd.packadd("snacks.nvim")
 	end,
 })
+
 vim.keymap.set("n", "<leader>E", function()
-	require("neo-tree.command").execute({
-		action = "focus",
-		source = "filesystem",
-		position = "left",
-		toggle = true,
-		reveal = true,
-		reveal_force_cwd = true,
+	local existing = Snacks.picker.get({ source = "explorer" })[1]
+	if existing then
+		existing:close()
+		return
+	end
+	Snacks.explorer({
+		layout = { preset = "sidebar", preview = false },
+		jump = { close = false },
 	})
-end, { desc = "Toggle neo-tree sidebar" })
+end, { desc = "Toggle snacks explorer sidebar" })
+
 vim.keymap.set("n", "<leader>e", function()
-	require("neo-tree.command").execute({
-		action = "focus",
-		source = "filesystem",
-		position = "float",
-		toggle = true,
-		reveal = true,
-		reveal_force_cwd = true,
+	local existing = Snacks.picker.get({ source = "explorer" })[1]
+	if existing then
+		existing:close()
+		return
+	end
+	Snacks.explorer({
+		layout = { preset = "dropdown", preview = false },
+		jump = { close = true },
 	})
-end, { desc = "Toggle neo-tree floating" })
+end, { desc = "Toggle snacks explorer floating" })
 
 -- ===================== telescope =====================
 vim.pack.add({
@@ -246,7 +274,7 @@ vim.pack.add({
 				"html", "css", "c", "cpp", "json", "markdown",
 			},
 			highlight = { enable = true },
-			indent = { enable = true },
+			indent = { enable = false },  -- 由 snacks.indent 替代
 		})
 		vim.cmd("TSUpdate")
 	end,
@@ -327,3 +355,109 @@ vim.pack.add({
 		})
 	end,
 })
+
+-- ========== snacks 所有子模块配置 ==========
+Snacks.config.explorer = {
+	enabled = true,  -- 文件浏览器（替代 neo-tree）
+	trash = true,    -- 使用系统回收站
+}
+
+Snacks.config.bigfile = {
+	enabled = true,  -- 大文件加载优化（>100MB 自动降级基础功能）
+}
+
+Snacks.config.image = {
+	enabled = true,  -- 图片查看（需 kitty/wezterm/ghostty 终端支持）
+}
+
+Snacks.config.dashboard = {
+	enabled = false,  -- 启动仪表盘
+}
+
+Snacks.config.debug = {
+	enabled = false,  -- 调试工具
+}
+
+Snacks.config.dim = {
+	enabled = false,  -- 当前窗口外区域变暗
+}
+
+Snacks.config.git = {
+	enabled = false,  -- Git hunk/diff 工具
+}
+
+Snacks.config.gitbrowse = {
+	enabled = false,  -- 浏览器打开 GitHub 链接
+}
+
+Snacks.config.indent = {
+	enabled = true,  -- 缩进引导线
+}
+
+Snacks.config.input = {
+	enabled = true,  -- 美观输入框
+}
+
+Snacks.config.keymap = {
+	enabled = false,  -- 快捷键管理
+}
+
+Snacks.config.layout = {
+	enabled = false,  -- 布局控制
+}
+
+Snacks.config.lazygit = {
+	enabled = true,  -- 集成 lazygit
+}
+
+Snacks.config.notifier = {
+	enabled = true,  -- 通知美化
+}
+
+Snacks.config.notify = {
+	enabled = false,  -- vim.notify 替代
+}
+
+Snacks.config.quickfile = {
+	enabled = true,  -- 快速跳转预渲染
+}
+
+Snacks.config.rename = {
+	enabled = false,  -- 重命名文件
+}
+
+Snacks.config.scope = {
+	enabled = false,  -- 作用域折叠
+}
+
+Snacks.config.scratch = {
+	enabled = false,  -- 临时便笺
+}
+
+Snacks.config.scroll = {
+	enabled = false,  -- 平滑滚动
+}
+
+Snacks.config.statuscolumn = {
+	enabled = false,  -- 自定义状态栏
+}
+
+Snacks.config.terminal = {
+	enabled = true,  -- 内嵌终端
+}
+
+Snacks.config.toggle = {
+	enabled = false,  -- 开关管理
+}
+
+Snacks.config.win = {
+	enabled = false,  -- 窗口管理
+}
+
+Snacks.config.words = {
+	enabled = true,  -- 光标下单词高亮
+}
+
+Snacks.config.zen = {
+	enabled = false,  -- 专注模式
+}
