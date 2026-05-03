@@ -7,18 +7,15 @@ vim.opt.shiftwidth = 2
 vim.opt.winborder = "rounded"
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-vim.opt.hlsearch = false
 vim.opt.incsearch = true
 vim.opt.laststatus = 0
+vim.opt.shortmess:append("I") -- 防止启动时闪烁
 vim.opt.showtabline = 0
 vim.opt.ruler = false
 vim.opt.cmdheight = 1
 vim.opt.wildmenu = true
 vim.opt.wildmode = "list:longest"
-vim.opt.shortmess:append("AWI")
 vim.opt.autoread = true
-vim.opt.conceallevel = 2
-vim.opt.backup = true
 vim.opt.backupdir = vim.fn.stdpath("data") .. "/backup//"
 vim.opt.directory = vim.fn.stdpath("data") .. "/swap//"
 vim.opt.undofile = true
@@ -29,8 +26,6 @@ vim.opt.clipboard = "unnamedplus"
 vim.opt.winbar = "%#WinBarPath#%f"
 vim.api.nvim_set_hl(0, "WinBarPath", { fg = "#61afef", bold = true })
 
--- 静默保存退出
--- vim.cmd("command! -bang WQ silent! w<bang> | q")
 
 -- ===================== 基础快捷键 =====================
 vim.keymap.set("n", "U", "<C-r>", { desc = "Redo" })
@@ -38,6 +33,11 @@ vim.keymap.set("n", "H", "^", { desc = "Line start" })
 vim.keymap.set("n", "J", "25j", { desc = "Down 25 lines" })
 vim.keymap.set("n", "K", "25k", { desc = "Up 25 lines" })
 vim.keymap.set("n", "L", "$", { desc = "Line end" })
+
+vim.keymap.set("v", "H", "^", { desc = "Line start" })
+vim.keymap.set("v", "J", "25j", { desc = "Down 25 lines" })
+vim.keymap.set("v", "K", "25k", { desc = "Up 25 lines" })
+vim.keymap.set("v", "L", "$", { desc = "Line end" })
 
 
 -- 封装居中命令
@@ -126,7 +126,7 @@ local function split_and_goto_definition(direction)
 	end
 end
 
-vim.keymap.set("n", "gd", function() go_to_definition(true) end, { desc = "Go to definition" } )
+vim.keymap.set("n", "gd", function() go_to_definition(true) end, { desc = "Go to definition" })
 vim.keymap.set("n", "gs", function() split_and_goto_definition("below") end, { desc = "Split below + go to definition" })
 vim.keymap.set("n", "gv", function() split_and_goto_definition("right") end, { desc = "VSplit right + go to definition" })
 

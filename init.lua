@@ -1,9 +1,8 @@
 -- Neovim 0.12 vim.pack 配置入口
 vim.g.mapleader = " "
-vim.notify = function() end
+-- vim.notify = function() end
 
 require("core")
-require("plugins.noice")
 require("plugins.snacks")
 require("plugins.lsp")
 require("plugins.which-key")
