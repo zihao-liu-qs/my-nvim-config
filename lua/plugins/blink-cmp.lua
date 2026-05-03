@@ -1,13 +1,24 @@
--- 自动补全
 vim.pack.add({
 	{ src = "https://github.com/Saghen/blink.cmp" },
 }, {
 	load = function()
 		vim.cmd.packadd("blink.cmp")
+
 		require("blink.cmp").setup({
 			sources = {
 				default = { "lsp", "path", "buffer" },
 			},
+
+			completion = {
+				menu = {
+					auto_show = true,
+				},
+				documentation = {
+					auto_show = true,
+					auto_show_delay_ms = 50,
+				},
+			},
+
 			keymap = {
 				preset = "default",
 				-- tab 确认补全
@@ -23,10 +34,15 @@ vim.pack.add({
 					"fallback",
 				},
 			},
+
+			signature = {
+				enabled = true,
+			},
+
 			appearance = {
-				use_nvim_cmp_as_default = false,
 				nerd_font_variant = "mono",
 			},
+
 			snippets = {
 				expand = function(snippet)
 					vim.snippet.expand(snippet)
