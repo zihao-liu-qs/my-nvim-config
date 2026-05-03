@@ -12,6 +12,5 @@ vim.pack.add({
 			highlight = { enable = true },
 			indent = { enable = false },
 		})
-		vim.cmd("TSUpdate")
 	end,
 })

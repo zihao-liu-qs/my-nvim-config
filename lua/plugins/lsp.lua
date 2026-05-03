@@ -11,6 +11,12 @@ vim.pack.add({
 			"cssls",
 			"ts_ls",
 			"clangd",
+			"lua_ls",
+			"jsonls",
+			"bashls",
+			"marksman",
+			"dockerls",
+			"yamlls",
 		})
 	end,
 })

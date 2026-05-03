@@ -10,6 +10,7 @@ vim.pack.add({
 			},
 			keymap = {
 				preset = "default",
+				-- tab 确认补全
 				["<Tab>"] = {
 					function(cmp)
 						if cmp.snippet_active() then
@@ -30,10 +31,6 @@ vim.pack.add({
 				expand = function(snippet)
 					vim.snippet.expand(snippet)
 				end,
-			},
-			-- 括号自动补全
-			auto_brackets = {
-				enabled = true,
 			},
 		})
 	end,

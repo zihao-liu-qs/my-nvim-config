@@ -11,5 +11,3 @@ vim.pack.add({
 		})
 	end,
 })
-
-vim.keymap.set("n", "<leader>cm", "<Cmd>Mason<CR>", { desc = "Open Mason" })
