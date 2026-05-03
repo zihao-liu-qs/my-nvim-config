@@ -44,6 +44,10 @@
       "rev": "ae52979ad412371ea6dc39ff70c8dfc681fb42b8",
       "src": "https://github.com/linrongbin16/lsp-progress.nvim"
     },
+    "marks.nvim": {
+      "rev": "f353e8c08c50f39e99a9ed474172df7eddd89b72",
+      "src": "https://github.com/chentoast/marks.nvim"
+    },
     "mason.nvim": {
       "rev": "57e5a8addb8c71fb063ee4acda466c7cf6ad2800",
       "src": "https://github.com/mason-org/mason.nvim"

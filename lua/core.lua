@@ -21,6 +21,8 @@ vim.opt.directory = vim.fn.stdpath("data") .. "/swap//"
 vim.opt.undofile = true
 vim.opt.undodir = vim.fn.stdpath("data") .. "/undo//"
 vim.opt.clipboard = "unnamedplus"
+-- 符号列：有符号时自动显示（书签、诊断等）
+vim.opt.signcolumn = "auto"
 
 -- 每个 pane 顶部显示相对路径（onedarkpro 蓝色）
 vim.opt.winbar = "%#WinBarPath#%f"
