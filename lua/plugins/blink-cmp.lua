@@ -1,4 +1,4 @@
--- blink.cmp（自动补全 + 括号补全）
+-- 自动补全
 vim.pack.add({
 	{ src = "https://github.com/Saghen/blink.cmp" },
 }, {

@@ -6,7 +6,7 @@ vim.pack.add({
 		vim.cmd.packadd("which-key.nvim")
 		require("which-key").setup({
 			preset = "modern",
-			delay = 500, -- 避免快速连按（如 dd）时触发
+			delay = 500,
 		})
 	end,
 })
