@@ -9,7 +9,7 @@ require("marks").setup({
 	default_mappings = false,
 	-- 始终显示符号列
 	sign_priority = { lower = 10, upper = 15, builtin = 8, bookmark = 20 },
-	builtin_marks = { ".", "<", ">", "^" },
+	builtin_marks = {}, -- 禁用自动显示 ^<> 等内置标记
 	-- 刷新间隔(ms)，越低越及时但越耗性能
 	refresh_interval = 150,
 	-- 循环跳转
@@ -48,7 +48,7 @@ vim.keymap.set("n", "m", function()
 	msg = msg .. "按字符跳转, ESC 取消: "
 	-- 显示在命令行
 	vim.cmd("redraw")
-	vim.api.nvim_echo({{ msg, "None" }}, false, {})
+	vim.api.nvim_echo({ { msg, "None" } }, false, {})
 	-- 等待下一个按键
 	local char = vim.fn.getchar()
 	if char == 27 then -- ESC 取消
@@ -105,7 +105,7 @@ vim.keymap.set("n", "M", function()
 	end
 	msg = msg .. "按字符跳转, ESC 取消: "
 	vim.cmd("redraw")
-	vim.api.nvim_echo({{ msg, "None" }}, false, {})
+	vim.api.nvim_echo({ { msg, "None" } }, false, {})
 	local char = vim.fn.getchar()
 	if char == 27 then
 		vim.cmd("redraw")

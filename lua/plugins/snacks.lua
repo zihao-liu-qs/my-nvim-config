@@ -38,4 +38,5 @@ Snacks.setup({
 	explorer = { enabled = true },
 	indent = { enabled = true, scope = { enabled = true } },
 	notifier = { enabled = true },
+	image = { enabled = true },
 })
