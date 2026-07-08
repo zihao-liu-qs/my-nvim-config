@@ -23,10 +23,10 @@ vim.pack.add({
 
 -- LSP 诊断配置：行末显示错误/警告文字
 vim.diagnostic.config({
-	virtual_text = true,       -- 行末显示诊断文字
-	signs = false,             -- 不显示左侧 gutter 图标（保持简洁）
-	underline = true,          -- 保留波浪线/下划线
-	update_in_insert = false,  -- 插入模式不更新诊断（避免打字时闪烁）
+	virtual_text = true,     -- 行末显示诊断文字
+	signs = false,           -- 不显示左侧 gutter 图标（保持简洁）
+	underline = true,        -- 保留波浪线/下划线
+	update_in_insert = false, -- 插入模式不更新诊断（避免打字时闪烁）
 })
 
 -- LSP 快捷键

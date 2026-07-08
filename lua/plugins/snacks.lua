@@ -31,7 +31,9 @@ local p = Snacks.picker
 vim.keymap.set("n", "<leader>ff", p.files)
 vim.keymap.set("n", "<leader>fg", p.grep)
 vim.keymap.set("n", "<leader>fr", p.recent)
-vim.keymap.set("n", "<leader>/", p.lines)
+vim.keymap.set("n", "<leader>f/", function()
+	p.lines({ layout = { preset = "dropdown" } })
+end)
 
 Snacks.setup({
 	bigfile = { enabled = true },

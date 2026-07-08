@@ -53,8 +53,12 @@ local function find_existing_window(location)
 		return nil
 	end
 	local loc = type(location[1]) == "table" and location[1] or location
-	local target_uri = loc.uri
-	local target_range = loc.range
+	-- 兼容 Location（uri/range）和 LocationLink（targetUri/targetRange）两种格式
+	local target_uri = loc.uri or loc.targetUri
+	local target_range = loc.range or loc.targetRange
+	if not target_range then
+		return nil
+	end
 	local target_line = target_range.start.line + 1 -- 1-indexed
 
 	for _, win in ipairs(vim.api.nvim_list_wins()) do
@@ -134,6 +138,19 @@ vim.keymap.set("n", "gv", function() split_and_goto_definition("right") end, { d
 
 vim.keymap.set("n", "<C-s>", ":botright split<CR>", { desc = "Split at bottom" })
 vim.keymap.set("n", "<C-v>", ":botright vsplit<CR>", { desc = "VSplit at right" })
+
+vim.keymap.set("n", "<leader>r", function()
+  vim.cmd("e")
+  vim.notify("File reloaded", vim.log.levels.INFO)
+end, { desc = "Reload file" })
+
+vim.keymap.set("n", "<leader>R", function()
+  local choice = vim.fn.confirm("Confirm to force reload file? This will discard unsaved changes.", "&Yes\n&No", 2)
+  if choice == 1 then
+    vim.cmd("e!")
+    vim.notify("File force reloaded", vim.log.levels.INFO)
+  end
+end, { desc = "Force reload file" })
 
 vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Pane left" })
 vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Pane down" })

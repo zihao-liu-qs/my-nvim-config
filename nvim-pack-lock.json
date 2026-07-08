@@ -28,6 +28,10 @@
       "rev": "3c51fa4104b97ddaccb66a6b34552e3eafd5b645",
       "src": "https://github.com/mluders/comfy-line-numbers.nvim"
     },
+    "devdocs.nvim": {
+      "rev": "5d3690ea29179ede67ae661669f0434bc8b80339",
+      "src": "https://github.com/maskudo/devdocs.nvim"
+    },
     "gruvbox": {
       "rev": "697c00291db857ca0af00ec154e5bd514a79191f",
       "src": "https://github.com/morhetz/gruvbox"
