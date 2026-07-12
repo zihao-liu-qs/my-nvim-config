@@ -40,5 +40,5 @@ Snacks.setup({
 	explorer = { enabled = true },
 	indent = { enabled = true, scope = { enabled = true } },
 	notifier = { enabled = true },
-	image = { enabled = true },
+	image = { enabled = _G.is_win == false }, -- Windows 终端不支持 kitty 图片协议
 })

@@ -8,7 +8,7 @@ vim.pack.add({
 			workspaces = {
 				{
 					name = "personal",
-					path = "/Users/liuzihao/Documents/Notes",
+					path = vim.fn.expand("~/Documents/Notes"), -- macOS/Windows/Linux 通用
 				},
 			},
 			legacy_commands = false,
