@@ -31,6 +31,9 @@ vim.opt.clipboard = "unnamedplus"
 
 -- ===================== Windows 特定配置 =====================
 if is_win then
+	-- 修复 Windows Terminal DSR 背景色探测超时 (E1568)
+	vim.env.TERM = "xterm-256color"
+
 	-- 优先使用 PowerShell，避免 cmd.exe 的兼容问题
 	if vim.fn.executable("powershell") == 1 then
 		vim.opt.shell = "powershell"
