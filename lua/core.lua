@@ -1,3 +1,7 @@
+-- ===================== 平台检测 =====================
+local is_win = vim.fn.has("win32") == 1
+_G.is_win = is_win -- 供其他模块使用
+
 -- ===================== 基础选项 =====================
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -16,11 +20,28 @@ vim.opt.cmdheight = 1
 vim.opt.wildmenu = true
 vim.opt.wildmode = "list:longest"
 vim.opt.autoread = true
-vim.opt.backupdir = vim.fn.stdpath("data") .. "/backup//"
-vim.opt.directory = vim.fn.stdpath("data") .. "/swap//"
+-- 使用 path separator 连接路径（兼容 Windows 反斜杠）
+local sep = is_win and "\\" or "/"
+vim.opt.backupdir = vim.fn.stdpath("data") .. sep .. "backup" .. sep .. sep
+vim.opt.directory = vim.fn.stdpath("data") .. sep .. "swap" .. sep .. sep
 vim.opt.undofile = true
-vim.opt.undodir = vim.fn.stdpath("data") .. "/undo//"
+vim.opt.undodir = vim.fn.stdpath("data") .. sep .. "undo" .. sep .. sep
+-- Windows: 两个 clipboard register 都指向系统剪贴板；macOS/Linux: 用 + register
 vim.opt.clipboard = "unnamedplus"
+
+-- ===================== Windows 特定配置 =====================
+if is_win then
+	-- 优先使用 PowerShell，避免 cmd.exe 的兼容问题
+	if vim.fn.executable("powershell") == 1 then
+		vim.opt.shell = "powershell"
+		vim.opt.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command"
+		vim.opt.shellredir = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode"
+		vim.opt.shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode"
+		vim.opt.shellquote = ""
+		vim.opt.shellxquote = ""
+	end
+end
+
 -- 符号列：有符号时自动显示（书签、诊断等）
 vim.opt.signcolumn = "auto"
 
