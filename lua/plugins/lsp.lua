@@ -4,12 +4,37 @@ vim.pack.add({
 }, {
 	load = function()
 		vim.cmd.packadd("nvim-lspconfig")
+
+		-- vtsls 替代 ts_ls：配 @vue/typescript-plugin 支持 .vue SFC
+		-- vue_ls 是混合模式，只处理 template/CSS，TS 请求转发给同 buffer 的 vtsls
+		local vue_language_server_path = vim.fn.stdpath("data")
+			.. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
+		vim.lsp.config("vtsls", {
+			filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+			settings = {
+				vtsls = {
+					tsserver = {
+						globalPlugins = {
+							{
+								name = "@vue/typescript-plugin",
+								location = vue_language_server_path,
+								languages = { "vue" },
+								configNamespace = "typescript",
+							},
+						},
+					},
+				},
+			},
+		})
+
 		vim.lsp.enable({
 			"pyright",
 			"gopls",
 			"html",
 			"cssls",
-			"ts_ls",
+			"emmet_language_server",
+			"vtsls",
+			"vue_ls",
 			"clangd",
 			"lua_ls",
 			"jsonls",
@@ -30,6 +55,15 @@ vim.diagnostic.config({
 })
 
 -- LSP 快捷键
+-- 移除 Neovim 0.12 内置 LSP 默认键位（只保留下面自己定义的 gr = references）
+vim.keymap.del("n", "grn")
+vim.keymap.del("n", "grr")
+vim.keymap.del("n", "gra")
+vim.keymap.del("x", "gra")
+vim.keymap.del("n", "gri")
+vim.keymap.del("n", "grt")
+vim.keymap.del("n", "grx")
+
 -- gd/gD 已在 core.lua 中定义（带窗口复用逻辑）
 vim.keymap.set("n", "gk", vim.lsp.buf.hover, { desc = "Hover documentation" })
 vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })

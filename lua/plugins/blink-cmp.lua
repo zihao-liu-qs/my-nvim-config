@@ -17,6 +17,9 @@ vim.pack.add({
 					auto_show = true,
 					auto_show_delay_ms = 50,
 				},
+				trigger = {
+					prefetch_on_insert = false,
+				},
 			},
 
 			keymap = {

@@ -28,6 +28,10 @@
       "rev": "3c51fa4104b97ddaccb66a6b34552e3eafd5b645",
       "src": "https://github.com/mluders/comfy-line-numbers.nvim"
     },
+    "conform.nvim": {
+      "rev": "016802de402556da54c36bd7359b441266b01cdd",
+      "src": "https://github.com/stevearc/conform.nvim"
+    },
     "devdocs.nvim": {
       "rev": "5d3690ea29179ede67ae661669f0434bc8b80339",
       "src": "https://github.com/maskudo/devdocs.nvim"
@@ -84,6 +88,10 @@
       "rev": "88c52297ed3e69ecf9f8652837888ecc727a28ee",
       "src": "https://github.com/nvim-mini/mini.surround"
     },
+    "minuet-ai.nvim": {
+      "rev": "3b0a4c5f97b7124d94302c608fbe01c0270d4fbe",
+      "src": "https://github.com/milanglacier/minuet-ai.nvim"
+    },
     "neo-tree.nvim": {
       "rev": "4d0828d95adaf4250c1373d2cd9318d3509712b7",
       "src": "https://github.com/nvim-neo-tree/neo-tree.nvim"
@@ -127,6 +135,10 @@
     "nvim-treesitter": {
       "rev": "42fc28ba918343ebfd5565147a42a26580579482",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
+    },
+    "nvim-ts-autotag": {
+      "rev": "88c1453db4ba7dd24131086fe51fdf74e587d275",
+      "src": "https://github.com/windwp/nvim-ts-autotag"
     },
     "nvim-web-devicons": {
       "rev": "c72328a5494b4502947a022fe69c0c47e53b6aa6",

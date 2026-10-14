@@ -23,6 +23,9 @@ vim.opt.undodir = vim.fn.stdpath("data") .. "/undo//"
 vim.opt.clipboard = "unnamedplus"
 -- 符号列：有符号时自动显示（书签、诊断等）
 vim.opt.signcolumn = "auto"
+-- 分屏默认方向：右侧 / 下方（snacks explorer 打开文件依赖这两个选项）
+vim.opt.splitright = true
+vim.opt.splitbelow = true
 
 -- 每个 pane 顶部显示相对路径（onedarkpro 蓝色）
 vim.opt.winbar = "%#WinBarPath#%f"
@@ -31,16 +34,29 @@ vim.api.nvim_set_hl(0, "WinBarPath", { fg = "#61afef", bold = true })
 
 -- ===================== 基础快捷键 =====================
 vim.keymap.set("n", "U", "<C-r>", { desc = "Redo" })
-vim.keymap.set("n", "H", "^", { desc = "Line start" })
-vim.keymap.set("n", "J", "25j", { desc = "Down 25 lines" })
-vim.keymap.set("n", "K", "25k", { desc = "Up 25 lines" })
-vim.keymap.set("n", "L", "$", { desc = "Line end" })
+-- "v" 同时作用于可视模式和选择模式，让 HJKL 在 normal/可视/选择下行为一致
+vim.keymap.set({ "n", "v" }, "H", "^", { desc = "Line start" })
+vim.keymap.set({ "n", "v" }, "J", "15j", { desc = "Down 15 lines" })
+vim.keymap.set({ "n", "v" }, "K", "15k", { desc = "Up 15 lines" })
+vim.keymap.set({ "n", "v" }, "L", "$", { desc = "Line end" })
 
-vim.keymap.set("v", "H", "^", { desc = "Line start" })
-vim.keymap.set("v", "J", "25j", { desc = "Down 25 lines" })
-vim.keymap.set("v", "K", "25k", { desc = "Up 25 lines" })
-vim.keymap.set("v", "L", "$", { desc = "Line end" })
+-- zm/zt 滚动位置：zm 光标置于窗口上方 30%，zt 置于上方 5%（zz 已解绑）
+local function scroll_cursor_to_percent(percent)
+	local win = vim.api.nvim_get_current_win()
+	if vim.v.count > 0 then -- 支持 [count]zm / [count]zt：先跳到指定行
+		vim.api.nvim_win_set_cursor(win, { vim.v.count, 0 })
+	end
+	local height = vim.api.nvim_win_get_height(win)
+	local target_row = math.max(1, math.floor(height * percent + 0.5))
+	local cursor = vim.api.nvim_win_get_cursor(win)
+	local view = vim.fn.winsaveview()
+	view.topline = cursor[1] - target_row + 1 -- winrestview 会自动 clamp 到有效范围
+	vim.fn.winrestview(view)
+end
 
+vim.keymap.set("n", "zm", function() scroll_cursor_to_percent(0.30) end, { desc = "Cursor at 30% from top" })
+vim.keymap.set("n", "zt", function() scroll_cursor_to_percent(0.08) end, { desc = "Cursor at 5% from top" })
+vim.keymap.set("n", "zz", "<Nop>") -- 解绑 zz（防误触居中）
 
 -- 封装居中命令
 local function center_cursor()
@@ -140,16 +156,16 @@ vim.keymap.set("n", "<C-s>", ":botright split<CR>", { desc = "Split at bottom" }
 vim.keymap.set("n", "<C-v>", ":botright vsplit<CR>", { desc = "VSplit at right" })
 
 vim.keymap.set("n", "<leader>r", function()
-  vim.cmd("e")
-  vim.notify("File reloaded", vim.log.levels.INFO)
+	vim.cmd("e")
+	vim.notify("File reloaded", vim.log.levels.INFO)
 end, { desc = "Reload file" })
 
 vim.keymap.set("n", "<leader>R", function()
-  local choice = vim.fn.confirm("Confirm to force reload file? This will discard unsaved changes.", "&Yes\n&No", 2)
-  if choice == 1 then
-    vim.cmd("e!")
-    vim.notify("File force reloaded", vim.log.levels.INFO)
-  end
+	local choice = vim.fn.confirm("Confirm to force reload file? This will discard unsaved changes.", "&Yes\n&No", 2)
+	if choice == 1 then
+		vim.cmd("e!")
+		vim.notify("File force reloaded", vim.log.levels.INFO)
+	end
 end, { desc = "Force reload file" })
 
 vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Pane left" })
@@ -159,10 +175,9 @@ vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Pane right" })
 
 
 -- ===================== 基础 autocmd =====================
--- 保存前自动格式化 + 创建父目录
+-- 保存前创建父目录（格式化由 conform.nvim 负责）
 vim.api.nvim_create_autocmd("BufWritePre", {
 	callback = function()
-		vim.lsp.buf.format()
 		local dir = vim.fn.expand("%:p:h")
 		if dir ~= "" and vim.fn.isdirectory(dir) == 0 then
 			vim.fn.mkdir(dir, "p")
@@ -189,3 +204,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 		end
 	end,
 })
+
+-- language diagnose detail
+vim.keymap.set("n", "<leader>ld", vim.diagnostic.open_float, { desc = "Language diagnostics" })
