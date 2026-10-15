@@ -36,6 +36,10 @@
       "rev": "5d3690ea29179ede67ae661669f0434bc8b80339",
       "src": "https://github.com/maskudo/devdocs.nvim"
     },
+    "flash.nvim": {
+      "rev": "5f0f270fdc7c5b0c21d903ee85b9cb06f2ac636a",
+      "src": "https://github.com/folke/flash.nvim"
+    },
     "gruvbox": {
       "rev": "697c00291db857ca0af00ec154e5bd514a79191f",
       "src": "https://github.com/morhetz/gruvbox"
@@ -183,6 +187,11 @@
     "todo-comments.nvim": {
       "rev": "31e3c38ce9b29781e4422fc0322eb0a21f4e8668",
       "src": "https://github.com/folke/todo-comments.nvim"
+    },
+    "token": {
+      "rev": "19acc041465c89739778a6054da8039b68798251",
+      "src": "https://github.com/ThorstenRhau/token",
+      "version": ">=0.0.0"
     },
     "typst-preview.nvim": {
       "rev": "87d0f3a1beedefe6fdd96422c04c3dceb69d1063",
