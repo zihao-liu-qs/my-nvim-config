@@ -12,6 +12,9 @@ vim.opt.laststatus = 0
 vim.opt.shortmess:append("I") -- 防止启动时闪烁
 vim.opt.showtabline = 0
 vim.opt.ruler = false
+-- 分屏时上方窗口底部会强制显示一行状态栏（默认含灰色文件名），
+-- 用单个空格清空它，只保留一行不可见的分隔条（文件路径统一由顶部 winbar 显示）
+vim.opt.statusline = " "
 vim.opt.cmdheight = 1
 vim.opt.wildmenu = true
 vim.opt.wildmode = "list:longest"
