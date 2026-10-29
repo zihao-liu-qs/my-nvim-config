@@ -8,7 +8,7 @@ vim.cmd.packadd("snacks.nvim")
 vim.api.nvim_create_autocmd("VimEnter", {
 	callback = function()
 		if vim.fn.argc() == 0 then
-			Snacks.explorer({ layout = { preset = "sidebar" } })
+			Snacks.explorer({ layout = { preset = "dropdown", preview = false }, jump = { close = true } })
 		end
 	end,
 })

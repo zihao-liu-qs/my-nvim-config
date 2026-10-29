@@ -108,6 +108,10 @@
       "rev": "4d0828d95adaf4250c1373d2cd9318d3509712b7",
       "src": "https://github.com/nvim-neo-tree/neo-tree.nvim"
     },
+    "neoscroll.nvim": {
+      "rev": "c8d29979cb0cb3a2437a8e0ae683fd82f340d3b8",
+      "src": "https://github.com/karb94/neoscroll.nvim"
+    },
     "noice.nvim": {
       "rev": "7bfd942445fb63089b59f97ca487d605e715f155",
       "src": "https://github.com/folke/noice.nvim.git"

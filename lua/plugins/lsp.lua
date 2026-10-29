@@ -64,7 +64,7 @@ vim.keymap.del("n", "gri")
 vim.keymap.del("n", "grt")
 vim.keymap.del("n", "grx")
 
--- gd/gD 已在 core.lua 中定义（带窗口复用逻辑）
+-- gd/gs/gv 已在 core.lua 中定义（带窗口复用逻辑）
 vim.keymap.set("n", "gk", vim.lsp.buf.hover, { desc = "Hover documentation" })
 vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
 vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Find references" })

@@ -39,14 +39,29 @@ vim.api.nvim_set_hl(0, "WinBarPath", { fg = "#61afef", bold = true })
 vim.keymap.set("n", "U", "<C-r>", { desc = "Redo" })
 -- "v" 同时作用于可视模式和选择模式，让 HJKL 在 normal/可视/选择下行为一致
 vim.keymap.set({ "n", "v" }, "H", "^", { desc = "Line start" })
-vim.keymap.set({ "n", "v" }, "J", "15j", { desc = "Down 15 lines" })
-vim.keymap.set({ "n", "v" }, "K", "15k", { desc = "Up 15 lines" })
+-- J/K 向下/上跳 15 行，并记录到跳转列表（normal 模式可用 Ctrl+o 返回）
+local function jump_lines(delta)
+	local line = vim.fn.line(".")
+	local col = vim.fn.col(".")
+	local target = math.max(1, math.min(line + delta, vim.fn.line("$")))
+	vim.cmd(string.format("normal! %dG", target)) -- G 是跳转命令，会记录出发位置
+	vim.fn.cursor(target, col)                   -- 恢复列（cursor() 不是跳转，不打断跳转列表）
+end
+
+vim.keymap.set("n", "J", function() jump_lines(15) end, { desc = "Down 15 lines" })
+vim.keymap.set("n", "K", function() jump_lines(-15) end, { desc = "Up 15 lines" })
+vim.keymap.set("v", "J", "15j", { desc = "Down 15 lines" })
+vim.keymap.set("v", "K", "15k", { desc = "Up 15 lines" })
 vim.keymap.set({ "n", "v" }, "L", "$", { desc = "Line end" })
+-- \ 跳到屏幕最后一行（原生 L，不经 L→$ 重映射）
+vim.keymap.set("n", "\\", "L", { desc = "Last line of screen" })
+-- | 跳到屏幕第一行（原生 H，不经 H→^ 重映射）
+vim.keymap.set("n", "|", "H", { desc = "First line of screen" })
 
 -- zm/zt 滚动位置：zm 光标置于窗口上方 30%，zt 置于上方 5%（zz 已解绑）
 local function scroll_cursor_to_percent(percent)
 	local win = vim.api.nvim_get_current_win()
-	if vim.v.count > 0 then -- 支持 [count]zm / [count]zt：先跳到指定行
+	if vim.v.count > 0 then -- 支持 [count]zm / [count]zt / [count]zb：先跳到指定行
 		vim.api.nvim_win_set_cursor(win, { vim.v.count, 0 })
 	end
 	local height = vim.api.nvim_win_get_height(win)
@@ -57,8 +72,9 @@ local function scroll_cursor_to_percent(percent)
 	vim.fn.winrestview(view)
 end
 
-vim.keymap.set("n", "zm", function() scroll_cursor_to_percent(0.30) end, { desc = "Cursor at 30% from top" })
-vim.keymap.set("n", "zt", function() scroll_cursor_to_percent(0.08) end, { desc = "Cursor at 5% from top" })
+vim.keymap.set("n", "zm", function() scroll_cursor_to_percent(0.40) end, { desc = "Cursor at 40% from top" })
+vim.keymap.set("n", "zt", function() scroll_cursor_to_percent(0.08) end, { desc = "Cursor at 8% from top" })
+vim.keymap.set("n", "zb", function() scroll_cursor_to_percent(0.90) end, { desc = "Cursor at 90% from top" })
 vim.keymap.set("n", "zz", "<Nop>") -- 解绑 zz（防误触居中）
 
 -- 封装居中命令
@@ -209,4 +225,4 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 })
 
 -- language diagnose detail
-vim.keymap.set("n", "<leader>ld", vim.diagnostic.open_float, { desc = "Language diagnostics" })
+vim.keymap.set("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Code diagnostics" })

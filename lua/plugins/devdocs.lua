@@ -24,5 +24,5 @@ vim.keymap.set("n", "<leader>dd", function()
 	end)
 end, { desc = "Browse devdocs" })
 
-vim.keymap.set("n", "<leader>di", "<Cmd>DevDocs install<CR>", { desc = "Install devdocs" })
+vim.keymap.set("n", "<leader>dI", "<Cmd>DevDocs install<CR>", { desc = "Install devdocs" })
 vim.keymap.set("n", "<leader>dD", "<Cmd>DevDocs delete<CR>", { desc = "Delete devdocs" })
